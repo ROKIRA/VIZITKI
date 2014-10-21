@@ -1,0 +1,194 @@
+*{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+}
+/**********************************/
+
+body{
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+button, input[type=submit]{
+    cursor: pointer;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+    th,td{
+        border: 1px solid #555555;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    thead{
+        background: #5959ff;
+        color: #ffffff;
+    }
+
+.forCanvas{
+    display: none;
+}
+canvas{
+    display: none;
+}
+
+header{
+    padding-bottom: 70px;
+}
+
+footer{
+    padding: 20px;
+}
+
+
+/***********************************************************************************************************/
+.loginbox_layout{
+    position: absolute;
+    background: rgba(63, 93, 217, 0.20);
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.loginbox{
+    width: 350px;
+    height: 250px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-top: -125px;
+    margin-left: -175px;
+}
+    .loginbox form{
+        padding: 20px;
+        border-radius: 20px;
+        background: rgba(0, 12, 171, 0.33);
+        box-shadow: 2px 2px 14px 1px rgba(0, 48, 95, 0.63);
+    }
+    .loginbox label{
+        font-family: "Comic Sans MS";
+        color: #fff;
+    }
+    .loginbox form input:not(.btn){
+        color: #3b3b3a;
+    }
+    .loginbox form input:focus:not(.btn){
+        border-color: #A505FF;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(233, 24, 57, 0.6);
+    }
+    .loginbox .btn{
+        padding-left: 30px;
+        padding-right: 30px;
+        display: block;
+        margin: 0 auto;
+    }
+
+#order{
+    width: 98%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+#order .order_info{
+    text-align: justify;
+    padding: 15px 20px;
+}
+.order_info_img{
+    width: 606px;
+    height: 348px;
+}
+
+#order figure{
+    display: inline-block;
+}
+
+#order img{
+    max-height: 350px;
+    max-width: 610px;
+}
+
+
+/***  DELETE ORDER || GROUP  ***/
+#delete_order_window, #delete_group_window{
+    display: none;
+    width: 350px;
+    height: 120px;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    margin-left: -175px;
+}
+#delete_order_window .w_header, #delete_group_window .w_header{
+    width: 100%;
+    background: #5959ff;
+}
+#delete_order_window .w_header:after, #delete_group_window .w_header:after{
+    display: block;
+    content: '';
+    clear: both;
+}
+    #delete_order_window .w_header h3, #delete_group_window .w_header h3{
+        color: #fff;
+        font-size: 16px;
+        float: left;
+        padding: 7px 0 7px 15px;
+        margin: 0;
+    }
+    #delete_order_window #close, #delete_group_window #close{
+        color: #fff;
+        font-size: 16px;
+        background: #c80000;
+        float: right;
+        padding: 7px 13px;
+        cursor: pointer;
+        margin: 0;
+    }
+    #delete_order_window #close:hover, #delete_group_window #close:hover{
+        background: #ef0000;
+    }
+#delete_order_window .w_body, #delete_group_window .w_body{
+    background: #F0E8E8;
+    padding: 15px;
+    text-align: center;
+}
+    #delete_order_window .w_body p, #delete_group_window .w_body p{
+        margin-bottom: 15px;
+    }
+    #delete_order_window .w_body strong, #delete_group_window .w_body strong{
+        color: #0092ef;
+    }
+
+
+.list{
+    width: 98%;
+    margin: 0 auto;
+    max-width: 1300px;
+}
+
+textarea{
+    resize: none;
+}
+
+
+#groups{
+
+}
+    #groups .preview img{
+        max-width: 100px;
+        max-height: 100px;
+    }
+#group{
+    width: 97%;
+    margin: 0 auto;
+}
+    #group .preview img{
+        max-width: 300px;
+    }
+    #group input[type=file]{
+        display: none;
+    }
