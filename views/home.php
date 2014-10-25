@@ -1,19 +1,27 @@
 <?php defined('VIZITKI') or die('Access denied'); ?>
 
-<section class="homepage">
-    <?php require_once 'blocks/bigButtonsMenu.php' ?>
 
-    <div class="slider">
-        <ul id="slider">
-            <li><img src="<?=PATH?>/uploads/" alt=""/></li>
-        </ul>
-    </div>
+<section class="homepage">
+    <?php if($slider):?>
+        <section class="slider">
+            <ul id="slider">
+                <?php foreach($slider as $slide): ?>
+                    <li>
+                        <img src="<?=PATH?>/uploads/slider/<?=$slide['image']?>" title="<?=$slide['text']?>" alt="<?=$slide['btn_title']?>"/>
+                        <a href="<?=$slide['btn_url']?>"><?=$slide['btn_title']?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </section>
+    <?php endif; ?>
+
+    <?php require_once 'blocks/bigButtonsMenu.php' ?>
 
     <section class="services">
 
         <?php foreach($services as $service): ?>
             <div class="service_block inlineBlock">
-                <img data-hover="<?=VIZITKAIMG?><?=($service['image_hover'] ? 'services/'.$service['image_hover'] : 'no_image.jpg')?>" src="<?=VIZITKAIMG?><?=($service['image'] ? 'services/'.$service['image'] : 'no_image.jpg')?>" alt="<?=$service['title']?>"/>
+                <img data-hover="<?=UPLOADS?><?=($service['image_hover'] ? 'services/'.$service['image_hover'] : 'no_image.jpg')?>" src="<?=UPLOADS?><?=($service['image'] ? 'services/'.$service['image'] : 'no_image.jpg')?>" alt="<?=$service['title']?>"/>
                 <div class="service_info">
                     <a href="<?=PATH?>/catalog/service/<?=$service['alias']?>" class="service_info_top">
                         <div class="like-h5"><?=$service['title']."\n"?><?=$service['size']?></div>
@@ -48,6 +56,18 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+
+        $('#slider').bxSlider({
+            mode: 'fade',
+            captions: true,
+            controls: false,
+            auto: true,
+            pause: 5000,
+            minSlides: 1,
+            maxSlides: 1,
+            moveSlides: 1
+        });
+
         $('.service_block').hover(function(){
             var _self = $(this).find('img');
             var src = _self.attr('src');
@@ -61,5 +81,22 @@
             _self.attr('src', src_hover);
             _self.data('hover', src);
         });
+
+
+    /************************** AUTH | LOGIN *********************/
+        var authWindow = $('#login');
+        var openWindow = $('#auth');
+        var closeWindow = $('#close');
+
+        openWindow.on('click', function(e){
+            e.preventDefault();
+            authWindow.fadeIn(400);
+        });
+        closeWindow.on('click', function(){
+            authWindow.fadeOut(400);
+        });
+
+
+
     });
 </script>
