@@ -82,5 +82,24 @@
             _self.data('hover', src);
         });
 
+<<<<<<< HEAD
+=======
+
+    /************************** AUTH | LOGIN *********************/
+        var authWindow = $('#login');
+        var openWindow = $('#auth');
+        var closeWindow = $('#close');
+
+        openWindow.on('click', function(e){
+            e.preventDefault();
+            authWindow.fadeIn(400);
+        });
+        closeWindow.on('click', function(){
+            authWindow.fadeOut(400);
+        });
+
+
+
+>>>>>>> cc040a90a60befc7a4d9618cec72c22cd06c806b
     });
 </script>
