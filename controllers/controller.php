@@ -24,8 +24,36 @@ if ($admin !== false){
         $mainMenu = getMenu('main');
         $footerMenu = getMenu('footer');
 
+
+    // GET CONFIGS
+    function getSetSiteConfigs(){
+        if(!getSession('CONFIGS')){
+            $configs = getSiteConfigs();
+
+            $assocConfig = array();
+            foreach($configs as $config){
+                $assocConfig[$config['name']] = [
+                    'title' => $config['title'],
+                    'value' => $config['value'],
+                ];
+            }
+
+            setSession('CONFIGS', $assocConfig);
+        }else{
+            $assocConfig = getSession('CONFIGS');
+        }
+
+
+        return $assocConfig;
+    }
+
+    $configs = getSetSiteConfigs();
+    $kurs = $configs['kurs']['value'];
+    define('KURS', $kurs);
+
+
     // EDITOR FLAG - IF TRUE LOAD CSS AND JS RESOURCES
-    $editor = false;
+        $editor = false;
 
 
     /**---------------------------------------------------
@@ -307,6 +335,9 @@ function offerOrder(){
 
             $error = '';
 
+            $service = getService($_POST['type']);
+            $save['type'] = $service['title'];
+
             if(!isset($_POST['printing_type'])){
                 $error .= '<li>Не выбран тираж</li>';
             }else{
@@ -314,33 +345,32 @@ function offerOrder(){
                 if(!$save['printing_type']) $error .= 'Ошибка!';
             }
 
-            if(!isset($_POST['paper_type'])){
+            if (!isset($_POST['kolvo'])) {
                 $error .= '<li>Не выбрано количество</li>';
-            }else{
-                $save['paper_type'] = getPaperType((int)abs($_POST['paper_type']));
-            }
-
-            if(!isset($_POST['kolvo'])){
-                $error .= '<li>Не выбрано количество</li>';
-            }else{
+            } else {
                 $save['tiraj'] = $save['printing_type']['id'];
                 $save['kolvo'] = $_POST['kolvo'] != 0 ? (int)abs($_POST['kolvo']) : 1;
             }
 
-            if(isset($_POST['EXTRA'])){
-                $extra = getExtra();
-                foreach($extra as $ext){
-                    if(isset($_POST['EXTRA'][$ext['name']]))
-                        $save['dop_uslugi'] .= $_POST['EXTRA'][$ext['name']].',';
+            if($service['alias'] == 'vizitki') {
+                if (!isset($_POST['paper_type'])) {
+                    $error .= '<li>Не выбран тип бумаги</li>';
+                } else {
+                    $save['paper_type'] = getPaperType((int)abs($_POST['paper_type']));
                 }
-            }else{
-                $save['dop_uslugi'] = NULL;
-            }
 
-            if(isset($_POST['edit_template'])){
-                $save['type'] = 'Визитки';
-            }else{
-                $save['type'] = 'Макеты';
+                if (isset($_POST['EXTRA'])) {
+                    $extra = getExtra(0);
+                    $extra_price = 0;
+                    foreach ($extra as $ext) {
+                        if (isset($_POST['EXTRA'][$ext['name']])) {
+                            $save['dop_uslugi'] .= $_POST['EXTRA'][$ext['name']] . ',';
+                            $extra_price += $save['printing_type']['count'] == 100 ? $ext['price1']*KURS : $ext['price2']*KURS;
+                        }
+                    }
+                } else {
+                    $save['dop_uslugi'] = NULL;
+                }
             }
 
             $save['type_side'] = (int)abs($_POST['TMPL']['type_side']);
@@ -349,12 +379,20 @@ function offerOrder(){
                 unset($_SESSION['error']);
                 unset($_SESSION['errors']);
 
-                $totalSum = ($save['printing_type']['price'] + $save['paper_type']['price']) * $save['kolvo'];
+                if($service['alias'] == 'vizitki') {
+                    $paper_type_price = $save['printing_type']['count'] == 100 ? $save['paper_type']['price1'] * KURS : $save['paper_type']['price2'] * KURS;
+                }else{
+                    $paper_type_price = 0;
+                    $extra_price = 0;
+                }
+
+                $totalSum = (ceil($save['printing_type']['price']*KURS + $paper_type_price + $extra_price) * $save['kolvo']);
 
                 $_SESSION['basket'][] = array(
                     'type' => $save['type'],
                     'tiraj' => $save['tiraj'],
                     'kolvo' => $save['kolvo'],
+                    'count' => $save['kolvo'] * $save['printing_type']['count'],
                     'type_sides' => $save['type_side'],
                     'wishes' => $save['wishes'],
                     'paper_type' => $save['paper_type'],
@@ -429,14 +467,14 @@ function offerOrder2(){
             if(!isset($_POST['printing_type'])){
                 $error .= '<li>Не выбран тираж</li>';
             }else{
-                $save['printing_type'] = getPrintingType($_POST['printing_type']);
+                $save['printing_type'] = getPrintingType(abs((int)trim($_POST['printing_type'])));
                 if(!$save['printing_type']) $error .= 'Ошибка!';
             }
 
             if(!isset($_POST['paper_type'])){
-                $error .= '<li>Не выбрано количество</li>';
+                $error .= '<li>Не выбран тип бумаги</li>';
             }else{
-                $save['paper_type'] = getPaperType((int)abs($_POST['paper_type']));
+                $save['paper_type'] = getPaperType(abs((int)$_POST['paper_type']));
             }
 
             if(!isset($_POST['kolvo'])){
@@ -447,7 +485,7 @@ function offerOrder2(){
             }
 
             if(isset($_POST['EXTRA'])){
-                $extra = getExtra();
+                $extra = getExtra(0);
                 foreach($extra as $ext){
                     if(isset($_POST['EXTRA'][$ext['name']]))
                         $save['dop_uslugi'] .= $_POST['EXTRA'][$ext['name']].',';
@@ -456,30 +494,29 @@ function offerOrder2(){
                 $save['dop_uslugi'] = NULL;
             }
 
-            if(isset($_POST['edit_template'])){
-                $save['type'] = 'Визитки';
-            }else{
-                $save['type'] = 'Макеты';
-            }
+            $save['type'] = 'Визитки';
 
-                $save['type_side'] = (int)abs($tpl['type_side']);
-                $save['img_out_1'] = $tpl['img_out_1'];
-                if( $save['type_side'] == 2)
-                    $save['img_out_2'] = $tpl['img_out_2'];
-                else
-                    $save['img_out_2'] = NULL;
+            $save['type_side'] = (int)abs($tpl['type_side']);
+            $save['img_out_1'] = $tpl['img_out_1'];
+            if( $save['type_side'] == 2)
+                $save['img_out_2'] = $tpl['img_out_2'];
+            else
+                $save['img_out_2'] = NULL;
 
 
             if($error == ''){
                 unset($_SESSION['error']);
                 unset($_SESSION['errors']);
 
-                $totalSum = ($save['printing_type']['price'] + $save['paper_type']['price']) * $save['kolvo'];
+                $paper_type_price = $save['printing_type']['count'] == 100 ? $save['paper_type']['price1']*KURS : $save['paper_type']['price2']*KURS;
+
+                $totalSum = (ceil($save['printing_type']['price']*KURS + $paper_type_price) * $save['kolvo']);
 
                 $_SESSION['basket'][] = array(
                     'type' => $save['type'],
                     'tiraj' => $save['tiraj'],
                     'kolvo' => $save['kolvo'],
+                    'count' => $save['kolvo'] * $save['printing_type']['count'],
                     'type_sides' => $save['type_side'],
                     'wishes' => $save['wishes'],
                     'paper_type' => $save['paper_type'],
@@ -545,6 +582,28 @@ function checkAndSaveOrder(){
 }
 /*==========================================================*/
 
+
+/*=============== SEND NEW PASSWORD ====================== */
+function sendNewPassword($email, $password){
+
+    $configs = getSession('CONFIGS');
+    $siteName = $configs['site_name']['value'];
+
+    $to      = $email;
+    $subject = 'Восстановление пароля';
+    $message = 'Здравствуйте!'. "\r\n" . 'Ваш пароль для входа: ' . $password . "\r\n" .
+                'Не забудте поменять пароль в личном кабинете' . "\r\n" .
+                'С уважением, администрация сайта '. $siteName;
+    $headers = 'X-Mailer: PHP/' . phpversion();
+
+    mail($to, $subject, $message, $headers);
+
+    return true;
+}
+/*======================================================== */
+
+
+
 /*=============== TEST IF TEXT PAGE ====================== */
 /*if(preg_match_all('/[catalog]{7,}[_]/', $view, $match)){
     $catalogView = $view;
@@ -561,6 +620,7 @@ function checkAndSaveOrder(){
         // homepage
         case('home'):
             $bigButtonsMenu = getMenu('big_buttons');
+            $slider = getSliderImages();
             $services = getServices();
             $services = getServiceTiraj($services);
             $page = getPageContent($view);
@@ -568,6 +628,65 @@ function checkAndSaveOrder(){
                 $page = '';
             }
 
+        break;
+
+        //registration
+        case('register'):
+            if(isset($_POST['register_submit'])){
+                register();
+            }
+        break;
+
+        //login
+        case('login'):
+            if(isset($_POST['auth'])){
+                logIn();
+            }else{
+                redirect();
+                exit();
+            }
+        break;
+
+        //logout
+        case('logout'):
+            logOut();
+        break;
+
+        //forget password
+        case('forget_password'):
+            if(isset($_POST['send_password'])){
+                $email = trim($_POST['email']);
+                if($email != ''){
+                    $newPassword = substr(uniqid(), 3, 6);
+                    if(!saveNewPassword($email, $newPassword)){
+                        setSession('error', 'Пользователь с таким емэйлом не найден!');
+                        setSession('user_email', $email);
+                    }elseif(!sendNewPassword($email, $newPassword)){
+                        setSession('error', 'Ошибка отправки сообщения!');
+                        setSession('user_email', $email);
+                    }
+                }else{
+                    setSession('error', 'Поле &laquo;Email;&raquo; должно быть заполнено');
+                }
+            }
+        break;
+
+
+        // trebovanija k maketam
+        case('trebovanija_k_maketam'):
+            $page = getPageContent($view);
+            if(!$page){
+                $page = '';
+            }
+            $view = 'info_page';
+        break;
+        // trebovanija k maketam
+        case('oplata_i_dostavka'):
+            $page = getPageContent($view);
+            if(!$page){
+                $page = '';
+            }
+            $view = 'info_page';
         break;
 
         // service page
@@ -594,7 +713,9 @@ function checkAndSaveOrder(){
         // edit template list
         case('vizitka_edit_template_list'):
             $bigButtonsMenu = getMenu('big_buttons');
-            $templates = getTemplates($alias);
+            $categories = getCategories();
+            $newTemplates = getNewTemplates();
+            $templates = getTemplates();
             $page = getPageContent($view);
             if(!$page){
                 $page = '';
@@ -622,11 +743,21 @@ function checkAndSaveOrder(){
             if(!$title || $title == NULL) setSession('error', 'Database error');
                 else unset($_SESSION['error']);
             $tiraj = getTiraj($layout_alias, '1,2');
-            if($layout_alias == 'vizitki') $extra = getExtra();
-            $paper_types = getPaperTypes();
+            if($layout_alias == 'vizitki'){
+                $extra = getExtra(0);
+                $paper_types = getPaperTypes();
+            }
 
             $layouts = getLayouts();
+        break;
 
+        // upload template layout
+        case('order_design'):
+            $editor = true;
+            $title = getServiceTitle($service_alias);
+            $tiraj = getTiraj($service_alias, '1,2');
+            if($service_alias == 'vizitki') $extra = getExtra(1);
+            $paper_types = getPaperTypes();
         break;
 
         //catalog text page
@@ -637,28 +768,6 @@ function checkAndSaveOrder(){
                 $page = '';
             }
             $view = 'textPage';
-        break;
-
-        //registration
-        case('register'):
-            if(isset($_POST['register_submit'])){
-                register();
-            }
-        break;
-
-        //login
-        case('login'):
-            if(isset($_POST['auth'])){
-                logIn();
-            }else{
-                redirect();
-                exit();
-            }
-        break;
-
-        //logout
-        case('logout'):
-            logOut();
         break;
 
         //editor
@@ -681,9 +790,16 @@ function checkAndSaveOrder(){
 
         //basket
         case('basket'):
-            $dop_uslugi = getExtra();
+            $dop_uslugi = getExtra('1,0');
             $tiraj = getAllTiraj();
             $layouts = getLayouts();
+
+            if(isset($_POST['index'])){
+                $index = (int)$_POST['index'];
+                $count = abs((int)$_POST['kolvo']);
+                basketRecount($index, $count);
+            }
+
         break;
 
         //offer

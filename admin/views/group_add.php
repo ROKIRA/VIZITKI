@@ -16,6 +16,11 @@
                 <?=$errors?>
             </ul>
         <?php endif; ?>
+        <?php if($msg = getSession('admin_success')): ?>
+            <div class="alert alert-success">
+                <?=$msg?>
+            </div>
+        <?php endif; ?>
 
         <div class="form-group">
             <label for="group_name">Наименование группы товаров:</label>
@@ -79,7 +84,7 @@
     </form>
 </section>
 
-<?php unset($_SESSION['admin_errors']); ?>
+<?php unset($_SESSION['admin_errors'], $_SESSION['admin_success']); ?>
 
 
 <script type="application/javascript">

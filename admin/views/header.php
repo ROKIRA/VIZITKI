@@ -23,9 +23,11 @@
                             <li><a href="<?=PATH.ADMIN?>catalog/group_list">Группы товаров</a></li>
                             <li><a href="<?=PATH.ADMIN?>catalog/group_add">Добавить группу товаров</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
+                            <li><a href="<?=PATH.ADMIN?>catalog/paper_list">Типы бумаги</a></li>
+                            <li><a href="<?=PATH.ADMIN?>catalog/paper_add">Добавить тип бумаги</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">One more separated link</a></li>
+                            <li><a href="<?=PATH.ADMIN?>catalog/printing_list">Тиражи</a></li>
+                            <li><a href="<?=PATH.ADMIN?>catalog/printing_add">Добавить тираж</a></li>
                         </ul>
                     </li>
                     <li><a href="#">Link</a></li>
@@ -38,7 +40,7 @@
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>-->
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Link</a></li>
+                    <li><a id="configs" href="#">НАСТРОЙКИ</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">

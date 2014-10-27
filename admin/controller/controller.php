@@ -21,6 +21,31 @@
     }
 
 
+    // GET CONFIGS
+    function getSettedSiteConfigs(){
+        if(!getSession('CONFIGS')){
+            $configs = getSiteConfigs();
+
+            $assocConfig = array();
+            foreach($configs as $config){
+                $assocConfig[$config['name']] = [
+                    'title' => $config['title'],
+                    'value' => $config['value'],
+                ];
+            }
+
+            setSession('CONFIGS', $assocConfig);
+        }else{
+            $assocConfig = getSession('CONFIGS');
+        }
+
+
+        return $assocConfig;
+    }
+
+    $CONFIGS = getSettedSiteConfigs();
+
+
 /*********************** ENTER TO ADMIN PANEL ********************************/
     if(!getSession('admin_auth') && $view != 'auth'){
         $ref = $_SERVER['URL'];
@@ -121,6 +146,7 @@ function addService($group){
             exit();
         }else{
             unset($_SESSION['admin_errors']);
+            setSession('admin_success', 'Новая группа товаров успешно добавлена.');
             redirect();
         }
     }else{
@@ -216,6 +242,7 @@ function editService($group){
             exit();
         }else{
             unset($_SESSION['admin_errors']);
+            setSession('admin_success', 'Изменения сохранены.');
             redirect();
         }
     }else{
@@ -226,8 +253,249 @@ function editService($group){
 
     return true;
 }
-/************************* ****************************/
+/************************* EDIT GROUP|SERVICE****************************/
 
+
+
+
+/**----------------------------------------------------
+// ================ EDIT PAPER TYPE =================== //
+----------------------------------------------------**/
+function editPaperType($paper){
+    $error = '';
+    if(!empty($_FILES)) {
+        $uploadDir = 'uploads/paper_type/';
+        foreach ($_FILES as $file) {
+            if (!$file['error']) {
+                $type = explode('/', $file['type']);
+                if ($type[0] != 'image') {
+                    $error = 'Можно загружать только изображения';
+                    setSession('admin_errors', "<li>$error</li>");
+                    redirect();
+                    exit();
+                }
+                if ($file['size'] > 2200000) {
+                    $error = 'Нельзя загружать файлы более <strong>2 МБ</strong>';
+                    setSession('admin_errors', "<li>$error</li>");
+                    redirect();
+                    exit();
+                }
+
+                if ($error == '') {
+                    $var = end(explode(".", $paper['image']));
+                    $uploadImageName = str_replace($var, '', $paper['image']) . $type[1];
+                    if($uploadImageName != 'none_paper.jpg' && $uploadImageName != 'none_paper.jpeg'){
+                        $uploadImage = $uploadDir . $uploadImageName;
+                    }else{
+                        $uploadImageName = uniqid(true). '.' .$type[1];
+                        $uploadImage = $uploadDir . $uploadImageName;
+                    }
+
+                    $success = is_uploaded_file($file['tmp_name']);
+                    if ($success) {
+                        move_uploaded_file($file['tmp_name'], $uploadImage);
+                        $paper['image'] = $uploadImageName;
+                    }
+
+                }
+            }
+        }
+    }
+
+    $error = '';
+    if($paper['title'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Наименование типа бумаги&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($paper['density'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Плотность&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($paper['color'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Цвет&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($paper['price1'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Цена за 100 штук&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($paper['price2'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Цена за 1000 штук&raquo;</strong> не должно быть пустым</li>';
+    }
+
+
+    if($error == ''){
+        if(!saveEditedPaperType($paper)){
+            setSession('admin_errors', '<li>Ошибка сохранения в базу данных!</li>');
+            redirect();
+            exit();
+        }else{
+            unset($_SESSION['admin_errors']);
+            setSession('admin_success', 'Изменения сохранены.');
+            redirect();
+        }
+    }else{
+        setSession('admin_errors', $error);
+        redirect();
+        exit;
+    }
+
+    return true;
+}
+/************************* EDIT PAPER TYPE ****************************/
+
+
+/**----------------------------------------------------
+// ================ ADD PAPER TYPE =================== //
+-----------------------------------------------------**/
+function addPaperType($paper){
+    $error = '';
+    if(!empty($_FILES)) {
+        $uploadDir = 'uploads/paper_type/';
+        foreach ($_FILES as $file) {
+            if (!$file['error']) {
+                $type = explode('/', $file['type']);
+                if ($type[0] != 'image') {
+                    $error = 'Можно загружать только изображения';
+                    setSession('admin_errors', "<li>$error</li>");
+                    redirect();
+                    exit();
+                }
+                if ($file['size'] > 2200000) {
+                    $error = 'Нельзя загружать файлы более <strong>2 МБ</strong>';
+                    setSession('admin_errors', "<li>$error</li>");
+                    redirect();
+                    exit();
+                }
+
+                if ($error == '') {
+                    $uploadImageName = uniqid(true). '.' .$type[1];
+                    $uploadImage = $uploadDir . $uploadImageName;
+
+                    $success = is_uploaded_file($file['tmp_name']);
+                    if($success) {
+                        move_uploaded_file($file['tmp_name'], $uploadImage);
+                        $paper['image'] = $uploadImageName;
+                    }
+
+                }
+            }
+        }
+    }
+
+    $error = '';
+    if($paper['title'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Наименование типа бумаги&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($paper['density'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Плотность&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($paper['color'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Цвет&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($paper['price1'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Цена за 100 штук&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($paper['price2'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Цена за 1000 штук&raquo;</strong> не должно быть пустым</li>';
+    }
+
+
+    if($error == ''){
+        if(!saveAddedPaperType($paper)){
+            setSession('admin_errors', '<li>Ошибка сохранения в базу данных!</li>');
+            redirect();
+            exit();
+        }else{
+            unset($_SESSION['admin_errors']);
+            setSession('admin_success', 'Новый тип бумаги добавлен.');
+            redirect();
+        }
+    }else{
+        setSession('admin_errors', $error);
+        redirect();
+        exit;
+    }
+
+    return true;
+}
+/************************* ADD PAPER TYPE ****************************/
+
+
+/**----------------------------------------------------
+// ================ EDIT PRINTING =================== //
+----------------------------------------------------**/
+function editPrinting($printing){
+    $error = '';
+    if($printing['count'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Количество&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($printing['price'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Цена&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($printing['type_side'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Тип&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($printing['group'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Группа&raquo;</strong> не должно быть пустым</li>';
+    }
+
+
+    if($error == ''){
+        if(!saveEditedPrinting($printing)){
+            setSession('admin_errors', '<li>Ошибка сохранения в базу данных!</li>');
+            redirect();
+            exit();
+        }else{
+            unset($_SESSION['admin_errors']);
+            setSession('admin_success', 'Изменения сохранены.');
+            redirect();
+        }
+    }else{
+        setSession('admin_errors', $error);
+        redirect();
+        exit;
+    }
+
+    return true;
+}
+/************************* EDIT PRINTING ****************************/
+
+
+/**----------------------------------------------------
+// ================ ADD PRINTING =================== //
+----------------------------------------------------**/
+function addPrinting($printing){
+    $error = '';
+    if($printing['count'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Количество&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($printing['price'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Цена&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($printing['type_side'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Тип&raquo;</strong> не должно быть пустым</li>';
+    }
+    if($printing['group'] == ''){
+        $error .= '<li class="error">Поле <strong>&laquo;Группа&raquo;</strong> не должно быть пустым</li>';
+    }
+
+
+    if($error == ''){
+        if(!saveAddedPrinting($printing)){
+            setSession('admin_errors', '<li>Ошибка сохранения в базу данных!</li>');
+            redirect();
+            exit();
+        }else{
+            unset($_SESSION['admin_errors']);
+            setSession('admin_success', 'Новый тираж успешно добавлен.');
+            redirect();
+        }
+    }else{
+        setSession('admin_errors', $error);
+        redirect();
+        exit;
+    }
+
+    return true;
+}
+/************************* ADD PRINTING ****************************/
 
 
 /**----------------------------------------------------
@@ -272,6 +540,29 @@ function editService($group){
         $group_id = $_POST['del_group_id'];
         if($images = deleteGroup($group_id)){
             removeGroupLayouts($images);
+            echo 'OK';
+        }
+        else{
+            echo 'Error!';
+        }
+        exit();
+    }
+/********** DELETE PAPER TYPE **********/
+    if(isset($_POST['del_paper_id'])){
+        $paper_id = $_POST['del_paper_id'];
+        if($image = deletePaperType($paper_id)){
+            removePaperImage($image);
+            echo 'OK';
+        }
+        else{
+            echo 'Error!';
+        }
+        exit();
+    }
+/********** DELETE PRINTING **********/
+    if(isset($_POST['del_printing_id'])){
+        $printing_id = $_POST['del_printing_id'];
+        if(deletePrinting($printing_id)){
             echo 'OK';
         }
         else{
@@ -380,6 +671,66 @@ function editService($group){
                     $view = 'group_add';
                 break;
 
+
+                case('paper_list'):
+                    $papers = getAdminPapers();
+
+                    $view = 'paper_list';
+                break;
+
+                case('paper_add'):
+                    if(isset($_POST['paper_add'])){
+                        if(isset($_POST['paper_active'])){
+                            $active = 1;
+                        }else{
+                            $active = 0;
+                        }
+                        $add_paper = array(
+                            'title' => trim($_POST['paper_title']),
+                            'density' => trim($_POST['paper_density']),
+                            'facture' => trim($_POST['paper_facture']),
+                            'color' => trim($_POST['paper_color']),
+                            'price1' => abs((int)trim($_POST['paper_price1'])),
+                            'price2' => abs((int)trim($_POST['paper_price2'])),
+                            'is_active' => $active,
+                        );
+                        addPaperType($add_paper);
+                    }
+
+                    $view = 'paper_add';
+                break;
+
+                case('printing_list'):
+                    $printings = getAdminPrintings();
+
+                    $view = 'printing_list';
+                break;
+
+                case('printing_add'):
+                    $groups = getAdminServices();
+                    if(isset($_POST['printing_add'])){
+                        if(isset($_POST['printing_active'])){
+                            $active = 1;
+                        }else{
+                            $active = 0;
+                        }
+                        $count = abs((int)trim($_POST['printing_count']));
+                        $type = abs((int)$_POST['printing_type']) == 1 ? '(односторонние)' : '(двусторонние)';
+                        $text = $count . ' штук ' . $type;
+                        $add_printing = array(
+                            'text' => $text,
+                            'count' => $count,
+                            'price' => abs((int)trim($_POST['printing_price'])),
+                            'type_side' => $_POST['printing_type'],
+                            'group' => $_POST['printing_group'],
+                            'is_active' => $active,
+                        );
+                        addPrinting($add_printing);
+                    }
+
+                    $view = 'printing_add';
+                break;
+
                 default:
                     include VIEW.'error404.php';
                 exit();
@@ -423,6 +774,62 @@ function editService($group){
                     }
 
                     $view = 'group_edit';
+                break;
+
+                case('paper'):
+                    $paper = getAdminPaper($item_id);
+                    if(!$paper) $_SESSION['admin']['error'] = 'database_error';
+                        else unset($_SESSION['admin']['error']);
+
+                    if(isset($_POST['paper_edit'])){
+                        if(isset($_POST['paper_active'])){
+                            $active = 1;
+                        }else{
+                            $active = 0;
+                        }
+                        $edit_paper = array(
+                            'id' => $paper['id'],
+                            'title' => trim($_POST['paper_title']),
+                            'density' => trim($_POST['paper_density']),
+                            'facture' => trim($_POST['paper_facture']),
+                            'color' => trim($_POST['paper_color']),
+                            'price1' => trim($_POST['paper_price1']),
+                            'price2' => trim($_POST['paper_price2']),
+                            'image' => $paper['image'],
+                            'is_active' => $active,
+                        );
+                        editPaperType($edit_paper);
+                    }
+                    $view = 'paper_edit';
+                break;
+
+                case('printing'):
+                    $groups = getAdminServices();
+                    $printing = getAdminPrinting($item_id);
+                    if(!$printing) $_SESSION['admin']['error'] = 'database_error';
+                    else unset($_SESSION['admin']['error']);
+
+                    if(isset($_POST['printing_edit'])){
+                        if(isset($_POST['printing_active'])){
+                            $active = 1;
+                        }else{
+                            $active = 0;
+                        }
+                        $count = abs((int)trim($_POST['printing_count']));
+                        $type = abs((int)$_POST['printing_type']) == 1 ? '(односторонние)' : '(двусторонние)';
+                        $text = $count . ' штук ' . $type;
+                        $edit_printing = array(
+                            'id' => $printing['id'],
+                            'text' => $text,
+                            'count' => $count,
+                            'price' => abs((int)trim($_POST['printing_price'])),
+                            'type_side' => $_POST['printing_type'],
+                            'group' => $_POST['printing_group'],
+                            'is_active' => $active,
+                        );
+                        editPrinting($edit_printing);
+                    }
+                    $view = 'printing_edit';
                 break;
 
 

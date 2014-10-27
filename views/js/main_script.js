@@ -43,5 +43,25 @@ function doImage(side) {
 $(document).ready(function(){
 
 
+/************************** AUTH | LOGIN *********************/
+    var authWindow = $('#login');
+    var openWindow = $('#auth, #auth_from_basket');
+    var closeWindow = $('#close');
+
+    function openAuthWindow(){
+        authWindow.fadeIn(400);
+    }
+    function closeAuthWindow(){
+        authWindow.fadeOut(400);
+    }
+
+    openWindow.on('click', function(e){
+        e.preventDefault();
+        openAuthWindow();
+    });
+    closeWindow.on('click', function(){
+        closeAuthWindow();
+    });
+
 
 });// END READY

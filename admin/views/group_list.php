@@ -23,8 +23,8 @@
         <?php if($groups): ?>
             <?php foreach($groups as $group): ?>
                 <tr id="group-<?=$group['id']?>">
-                    <td><?= $group['title'] ?></td>
-                    <td><?=($group['is_active'] == 1)? '<span class="yes">Да</span>' : '<span class="yes">Да</span>'?></td>
+                    <td><h4><?= $group['title'] ?></h4></td>
+                    <td><?=($group['is_active'] == 1)? '<span class="label label-success">Да</span>' : '<span class="label label-danger">Нет</span>'?></td>
                     <td class="preview"><img src="<?=($group['image'] != null ? PATH.'/uploads/services/'.$group['image'] : PATH.'/uploads/no_image.jpg') ?>" alt="<?= $group['alias'] ?>"/></td>
                     <td><p><a href="<?=PATH.ADMIN?>catalog/group/<?=$group['id']?>">Просмотр/Редактировать</a></p><p><a class="delete_group" data-group="<?=$group['id']?>" href="#">Удалить</a></p></td>
                 </tr>
