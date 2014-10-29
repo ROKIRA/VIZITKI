@@ -1,4 +1,4 @@
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+/*html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
     margin:0;
     padding:0;
     border:0;
@@ -39,7 +39,7 @@ html, body {
     height:100%;
     margin:0;
     padding:0
-}
+}*/
 @font-face {
     font-family:CenturyGothic;
     src:url(fonts/gothic.eot);
@@ -56,9 +56,8 @@ html, body {
 }
 body {
     color:#222;
-    font:13px/15px CenturyGothic;
+    /*font:13px/15px CenturyGothic;*/
     background:#fff;
-    -webkit-backface-visibility:hidden
 }
 a {
     text-decoration:underline;
@@ -90,7 +89,7 @@ input:-moz-placeholder {
     margin:0 auto;
     position:relative
 }
-.hTop {
+/*.hTop {
     padding:30px 0;
     border-bottom:1px solid #efefef;
     text-align:center;
@@ -134,7 +133,7 @@ input:-moz-placeholder {
 .hTop_right a:hover, .hTop_right a.cur {
     color:#fff;
     background:#9c7e38
-}
+}*/
 .enter {
     position:relative
 }
@@ -229,9 +228,9 @@ input:-moz-placeholder {
     border:0;
     margin:0 auto;
     cursor:pointer;
-    outline:0!important;
-    color:#000!important;
-    text-decoration:none!important;
+    outline:0;
+    color:#000;
+    text-decoration:none;
     padding:0 25px;
     background:#F1CC6B;
     box-shadow:0 2px 2px rgba(0, 0, 0, .73)
@@ -884,33 +883,24 @@ h1 {
 }
 .but, .form_style .but {
     font:13px/20px CenturyGothic;
-    color:#fff!important;
+    color:#fff;
     height:22px;
     padding:4px 10px;
     display:inline-block;
-    background: #3535a5 !important;
+    background: #3535a5;
     text-decoration:none;
-    border:1px solid #afafaf!important;
+    border:1px solid #afafaf;
     cursor:pointer;
     box-shadow:0 2px 4px #ccc;
     margin:0;
     position:relative;
     z-index:1;
     vertical-align:bottom;
-    width:auto!important;
-
-    -o-border-radius: 15px;
-    -moz-border-radius: 15px;
-    -webkit-border-radius: 15px;
-    border-radius: 15px;
+    width:auto;
 }
 input.but, .form_style input.but {
     padding:3px 20px 5px;
     height:32px;
-}
-.but:hover, .form_style .but:hover {
-    box-shadow:inset 0 3px 7px rgba(0, 0, 0, .4), inset 0 -2px 3px rgba(255, 255, 255, .7)!important;
-    background: #5959ff !important
 }
 .row {
     padding:0 0 5px;
@@ -1041,8 +1031,8 @@ input.but, .form_style input.but {
 .sdvig {
 }
 .help {
-    color:green;
-    font:11px/1.2em Arial, Helvetica, sans-serif
+    color:#179ec4;
+    font:13px/1.2em Arial, Helvetica, sans-serif
 }
 .comment_txt_block h2 {
     font:20px/24px CenturyGothic Bold;
@@ -1248,11 +1238,11 @@ input.but, .form_style input.but {
     font-size:15px;
     line-height:25px;
     padding:2px 15px;
-    color:#fff !important;
+    color:#fff;
     background: #3535a5;
     display:block;
     position:relative;
-    text-decoration:none!important;
+    text-decoration:none;
     -webkit-transition:all .1s ease;
     -moz-transition:all .1s ease;
     -ms-transition:all .1s ease;
@@ -1338,7 +1328,7 @@ input.but, .form_style input.but {
 
 .cardEditorField {
     border: 1px solid transparent;
-    width: 550px;
+    width: 555px;
     overflow: hidden;
     height: 287px;
     position: relative;

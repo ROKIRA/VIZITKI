@@ -47,16 +47,16 @@
                 <?php else: ?>
                 <a id="auth" href="#">Вход</a>
                 <section id="login">
+                        <div class="auth_header">
+                            <h3>Авторизация</h3>
+                            <p id="close">X</p>
+                        </div>
                     <?php if($error = getSession('error')): ?>
                     <p class="error"><?=$error?></p>
                     <?php unset($_SESSION['error']); endif; ?>
-                        <div class="auth_header">
-                            <h3>Вход</h3>
-                            <p id="close">X</p>
-                        </div>
                         <form action="<?= PATH . '/login' ?>" method="post">
-                            <input type="text" name="login" placeholder="Ваш логин"/>
-                            <input type="password" name="password" placeholder="Ваш Пароль"/>
+                            <input type="text" name="login" placeholder="Ваш логин" required/>
+                            <input type="password" name="password" placeholder="Ваш пароль" required/>
                             <input type="submit" name="auth" value="Войти"/>
                         </form>
                         <a href="<?=PATH.'/registration'?>">Регистрация</a>

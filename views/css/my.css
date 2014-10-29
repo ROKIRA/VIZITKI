@@ -2,10 +2,10 @@
     font: 16px/45px CenturyGothic Bold;
     color: #000000;
 }
-.properties-order > .small-italic {
+/*.properties-order > .small-italic {
     font-size: 14px;
     font-style: italic;
-}
+}*/
 .properties-order {
     font: 16px/45px CenturyGothic Bold;
     color: #000000;
@@ -60,13 +60,9 @@
 #paper-list-ul .infoPaper span {
     font-weight: bold;
 }
-#showPaperType {
+/*#showPaperType {
     display: inline-block;
-}
-#showPaperType > p {
-    display: inline-block;
-    vertical-align: middle;
-}
+}*/
 #showPaperType > span {
     display: inline-block;
     vertical-align: middle;
@@ -412,7 +408,7 @@ h1.title {
 
 .editorBtn {
     background: none repeat scroll 0 0 #3535a5;
-    color: #FFFFFF !important;
+    color: #FFFFFF;
     display: block;
     font-size: 14px;
     line-height: 24px;
