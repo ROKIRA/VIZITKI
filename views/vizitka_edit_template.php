@@ -1,7 +1,7 @@
 <?php defined('VIZITKI') or die('Access denied'); ?>
 
 <?php if($template): ?>
-    <section id="editor" style="width: 960px;">
+    <section id="editor">
     <div class="editor">
         <div class="editorLeft">
             <div class="topControl">
@@ -33,6 +33,15 @@
                             <option value="20">20</option>
                             <option value="24">24</option>
                             <option value="28">28</option>
+                            <option value="32">32</option>
+                            <option value="36">36</option>
+                            <option value="40">40</option>
+                            <option value="46">46</option>
+                            <option value="52">52</option>
+                            <option value="60">60</option>
+                            <option value="72">72</option>
+                            <option value="84">84</option>
+                            <option value="96">96</option>
                         </select>
                     </div>
                     <div class="chooseColor">
@@ -74,6 +83,7 @@
                 <a class="editorBtn active" href="#" id="front_side">Лицевая сторона</a>
                 <a class="editorBtn" href="#" id="back_side">Обратная сторона</a>
             </div>
+
         </div><!-- .editorLeft -->
         <div class="editorRight">
             <div class="editorRightBtn">
@@ -97,26 +107,30 @@
             </div><!-- .sortableBlock -->
             <!--<button id="save" class="editorBtn">Подтвердить изменение элементов на макете</button>-->
         </div><!-- .editorRight -->
-        <div class="clear"></div>
-    </div><!-- .editor -->
 
     <form class="validat form_style" method="post" action="<?=PATH?>/offer/order1" enctype='multipart/form-data'>
 
         <input type="hidden" name="edit_template" />
 
-        <div class="row checkbox-style">
-            <div class="controls">
-                <input id="confirm-template" type="checkbox" name="confirm_template" class="valid" required/>
-                <label for="confirm-template" class="simple-label">Я проверил орфографию и контактные данные</label>
-            </div>
-        </div>
 
-        <div class="row">
-            <label class="label"></label>
-            <div class="controls">
-                <input type="submit" class="but submit" value="Следующий шаг" />
+        <section class="underEditor">
+
+            <div class="row">
+                <div class="controls">
+                    <a href="<?=PATH?>/catalog/edit-template-vizitki/" class="move_back">Вернуться</a>
+                </div>
+
+                <div class="controls">
+                    <input id="confirm-template" type="checkbox" name="confirm_template" required/>
+                    <label for="confirm-template" id="confirm-template-label" class="disabled">Я проверил орфографию и контактные данные</label>
+                </div>
+
+                <div class="controls">
+                    <input type="submit" id="nextStep" class="but submit disabled" disabled value="Следующий шаг" />
+                </div>
             </div>
-        </div>
+        </section>
+
 
         <?php if(isset($_SESSION['TMPL']['code']) && ($_SERVER['HTTP_REFERER'] == PATH.'/offer/order1')): ?>
             <input type="hidden" class="init_template"  id="code_template" name="TMPL[code]" value='<?=$_SESSION['TMPL']['code']?>'/>
@@ -142,6 +156,8 @@
         <?php endif; ?>
         <input type="hidden" id="current_side" value="1"/>
     </form>
+    </div><!-- .editor -->
+    <div class="clear"></div>
     </section>
 
     <section id="add_bside_window_bg">

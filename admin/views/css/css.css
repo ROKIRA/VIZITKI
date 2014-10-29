@@ -89,6 +89,79 @@ footer{
         margin: 0 auto;
     }
 
+/**+++++++++++++++++++++++++++++++++++++++++ CONFIG WINDOW +++++++++++++++++++++++++++++++++++++++++**/
+#configs{
+    font-weight: bold;
+}
+#config_window_bg{
+    display: none;
+    background: rgba(0,0,0,0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 9999;
+}
+#config_window_wrapper{
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    position: relative;
+}
+#config_window{
+    background: #EFEFEF;
+    width: 1015px;
+    height: 550px;
+    display: none;
+    z-index: 99999;
+    position: absolute;
+    top:50%;
+    left:50%;
+    margin-left: -507px;
+    margin-top: -300px;
+}
+.window_header{
+    text-align: left;
+    background: #0092ef;
+    font-size: 18px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+}
+.window_header h4{
+    padding: 10px 15px;
+    float: left;
+    margin: 0;
+}
+#close_config_window{
+    cursor: pointer;
+    font-size: 16px;
+    float: right;
+    background: #EA2E2E;
+    padding: 9px 18px;
+    text-align: center;
+    margin: 0;
+    color: #fff;
+}
+#close_config_window:hover{
+    background: #ea1900;
+}
+.window_header:after{
+    display: block;
+    content: '';
+    clear: both;
+}
+#window_body{
+    background: #efefef;
+    height: 515px;
+    text-align: left;
+    overflow-y: auto;
+    padding: 13px;
+}
+/**-------------------------------------- CONFIG WINDOW ---------------------------------------------**/
+
 #order{
     width: 98%;
     max-width: 1300px;
@@ -114,7 +187,10 @@ footer{
 
 
 /***  DELETE ORDER || GROUP  ***/
-#delete_order_window, #delete_group_window{
+#delete_order_window,
+#delete_group_window,
+#delete_paper_window,
+#delete_printing_window{
     display: none;
     width: 350px;
     height: 120px;
@@ -123,23 +199,35 @@ footer{
     left: 50%;
     margin-left: -175px;
 }
-#delete_order_window .w_header, #delete_group_window .w_header{
+#delete_order_window .w_header,
+#delete_group_window .w_header,
+#delete_paper_window .w_header,
+#delete_printing_window .w_header{
     width: 100%;
     background: #5959ff;
 }
-#delete_order_window .w_header:after, #delete_group_window .w_header:after{
+#delete_order_window .w_header:after,
+#delete_group_window .w_header:after,
+#delete_paper_window .w_header:after,
+#delete_printing_window .w_header:after{
     display: block;
     content: '';
     clear: both;
 }
-    #delete_order_window .w_header h3, #delete_group_window .w_header h3{
+    #delete_order_window .w_header h3,
+    #delete_group_window .w_header h3,
+    #delete_paper_window .w_header h3,
+    #delete_printing_window .w_header h3{
         color: #fff;
         font-size: 16px;
         float: left;
         padding: 7px 0 7px 15px;
         margin: 0;
     }
-    #delete_order_window #close, #delete_group_window #close{
+    #delete_order_window #close,
+    #delete_group_window #close,
+    #delete_paper_window #close,
+    #delete_printing_window #close{
         color: #fff;
         font-size: 16px;
         background: #c80000;
@@ -148,18 +236,30 @@ footer{
         cursor: pointer;
         margin: 0;
     }
-    #delete_order_window #close:hover, #delete_group_window #close:hover{
+    #delete_order_window #close:hover,
+    #delete_group_window #close:hover,
+    #delete_paper_window #close:hover,
+    #delete_printing_window #close:hover{
         background: #ef0000;
     }
-#delete_order_window .w_body, #delete_group_window .w_body{
+#delete_order_window .w_body,
+#delete_group_window .w_body,
+#delete_paper_window .w_body,
+#delete_printing_window .w_body{
     background: #F0E8E8;
     padding: 15px;
     text-align: center;
 }
-    #delete_order_window .w_body p, #delete_group_window .w_body p{
+    #delete_order_window .w_body p,
+    #delete_group_window .w_body p,
+    #delete_paper_window .w_body p,
+    #delete_printing_window .w_body p{
         margin-bottom: 15px;
     }
-    #delete_order_window .w_body strong, #delete_group_window .w_body strong{
+    #delete_order_window .w_body strong,
+    #delete_group_window .w_body strong,
+    #delete_paper_window .w_body strong,
+    #delete_printing_window .w_body strong{
         color: #0092ef;
     }
 
@@ -178,6 +278,9 @@ textarea{
 #groups{
 
 }
+    #groups h4{
+        text-align: left;
+    }
     #groups .preview img{
         max-width: 100px;
         max-height: 100px;
@@ -191,4 +294,44 @@ textarea{
     }
     #group input[type=file]{
         display: none;
+    }
+
+#papers{
+
+}
+    #papers h4{
+        text-align: left;
+    }
+    #papers .preview img{
+        max-width: 100px;
+        max-height: 100px;
+        -webkit-box-shadow: 2px 1px 10px 3px #222222;
+        box-shadow: 2px 1px 10px 3px #222222;
+    }
+#paper{
+    width: 97%;
+    margin: 0 auto;
+}
+    #paper .preview img{
+        max-width: 300px;
+    }
+    #paper input[type=file]{
+        display: none;
+    }
+    #paper input[type=submit]{
+        margin-top: 15px;
+    }
+
+#printings{
+
+}
+    #printings h4{
+        text-align: left;
+    }
+#printing{
+    width: 97%;
+    margin: 0 auto;
+}
+    #paper input[type=submit]{
+        margin-top: 15px;
     }

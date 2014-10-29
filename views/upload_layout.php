@@ -57,7 +57,7 @@
             <?php if($layouts): ?>
             var maxFiles = 5-<?=count($layouts)?>;
             <?php else: ?>
-            var maxFiles = 5;
+            var maxFiles = <?=$configs['tpl_count']?>;
             <?php endif; ?>
 // Количество уже загруженных
             <?php if($layouts): ?>
@@ -447,7 +447,7 @@
                 <select data-error="" id="printingType" class="valid" name="printing_type">
                     <option data-cost="0"></option>
                     <?php foreach($tiraj as $t): ?>
-                        <option data-cost="<?=$t['price']?>" data-side="<?=$t['type_side']?>" value="<?=$t['id']?>">
+                        <option data-cost="<?=ceil($t['price']*KURS)?>" data-side="<?=$t['type_side']?>" value="<?=$t['id']?>">
                             <?=$t['text']?>
                         </option>
                     <?php endforeach; ?>
@@ -464,18 +464,20 @@
             </div>
         </div>
 
+        <?php if($layout_alias == 'vizitki'): ?>
         <p class="properties-order">Дополнительные услуги</p>
 
         <?php if($extra): ?>
             <?php foreach($extra as $ext): ?>
             <div class="row checkbox-style">
                 <div class="controls">
-                    <input type="checkbox" id="extra-<?=$ext['id']?>" class="extraCost" data-cost1="<?=$ext['price1']?>" data-cost2="<?=$ext['price2']?>" name="EXTRA[<?=$ext['name']?>]" value="<?=$ext['id']?>" />
+                    <input type="checkbox" id="extra-<?=$ext['id']?>" class="extraCost" data-cost1="<?=ceil($ext['price1']*KURS)?>" data-cost2="<?=ceil($ext['price2']*KURS)?>" name="EXTRA[<?=$ext['name']?>]" value="<?=$ext['id']?>" />
                     <label class="simple-label" for="extra-<?=$ext['id']?>"><?=$ext['title']?><span>(+0 грн. за комплект)</span></label>
                 </div>
             </div>
             <?php endforeach; ?>
         <?php endif; ?>
+
 
         <div id="showPaperType">
             <p class="properties-order"><span class="small-italic">Тип бумаги</span></p>
@@ -489,7 +491,7 @@
                 <?php foreach($paper_types as $paper): ?>
                     <li>
                         <div class="radioSelect">
-                            <input type="radio" name="paper_type" id="paperNum-<?=$paper['id']?>" data-cost1="<?=$paper['price']?>" data-cost2="0" value="<?=$paper['id']?>">
+                            <input type="radio" name="paper_type" id="paperNum-<?=$paper['id']?>" data-cost1="<?=ceil($paper['price1']*KURS)?>" data-cost2="<?=ceil($paper['price2']*KURS)?>" value="<?=$paper['id']?>">
                             <label for="paperNum-<?=$paper['id']?>"><?=$paper['title']?></label>
                         </div>
                         <img src="<?=PATH.'/uploads/paper_type/'.$paper['image']?>"/>
@@ -502,6 +504,7 @@
                 <?php endforeach; ?>
             </ul>
         </div>
+        <?php endif; ?>
 
         <p class="properties-order">Авторские права</p>
 
@@ -526,6 +529,8 @@
             <span>Итого:</span> <span id="totalCost">0</span> грн
         </div>
         <input type="hidden" id="type_side" name="TMPL[type_side]" value="1"/>
+
+        <input type="hidden" name="type" value="<?=$layout_alias?>"/>
 
         <div class="row">
             <label class="label"></label>

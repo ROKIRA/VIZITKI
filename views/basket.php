@@ -4,7 +4,7 @@
         <span><a href="/">Главная</a></span>  <span>Оформление заказа</span>
     </div>
 
-    <?php /*print_arr($_SESSION)*/ ?>
+    <?php print_arr($_SESSION) ?>
 
     <?php if($msg = getSession('success')): ?>
         <div class="success"><?=$msg?></div>
@@ -23,7 +23,7 @@
                 </thead>
                 <tbody>
                 <?php //print_arr($basket); ?>
-                    <?php $i=1; $totalSum=0; foreach($basket as $item): ?>
+                    <?php $i=1; $index=0; $totalSum=0; foreach($basket as $item): ?>
                         <tr>
                             <td><a href="<?=PATH.'/basket/delete/'.($i-1)?>">del</a></td>
                             <td>
@@ -59,7 +59,9 @@
                                 <?=$item['type']?>,
                                 количество <?=$item['count']?> штук
                                 <?php if($item['type_sides']==1) echo '(односторонние)'; else if($item['type_sides']==2) echo '(двусторонние)'; ?>
+                                <?php if($item['dop_uslugi'] != null || isset($item['paper_type'])): ?>
                                 <p><strong>Дополнительно:</strong></p>
+                                <?php endif; ?>
                                 <?php if($item['dop_uslugi'] != null): ?>
                                     <ul>
                                         <?php
@@ -72,17 +74,18 @@
                                                 <?php endfor; ?>
                                         <?php endforeach; ?>
                                     </ul>
-
                                 <?php endif; ?>
                                 <?php if(isset($item['paper_type'])): ?>
                                     <p><strong>Бумага:</strong></p>
-                                    <p class="paper_type"><?=$item['paper_type']['title']?> (+<?=$item['paper_type']['price']?>грн)</p>
+                                    <p class="paper_type">
+                                        <?=$item['paper_type']['title']?> (+<?=(($item['count']/$item['kolvo']) == 100 ? ceil($item['paper_type']['price1']*KURS) : ceil($item['paper_type']['price2']*KURS)) ?>грн)
+                                    </p>
                                 <?php endif; ?>
                             </td>
-                            <td><input type="text" id="kolvo-<?=$i?>" value="<?=$item['kolvo']?>" /></td>
+                            <td><form action="" method="post" ><input type="hidden" name="index" value="<?=$index?>"/><input type="number" name="kolvo" id="kolvo-<?=$i?>" value="<?=$item['kolvo']?>" /></form></td>
                             <td><?=$item['totalSum']?> грн</td>
                         </tr>
-                    <?php $i++; $totalSum += $item['totalSum']; endforeach; ?>
+                    <?php $i++; $index++; $totalSum += $item['totalSum']; endforeach; ?>
                 </tbody>
             </table>
             <p class="totalSum">
@@ -96,7 +99,7 @@
                     <div class="links">
                         <ul id="tabs">
                             <li><a href="#">Новый покупатель</a></li>
-                            <li><a href="#">Я уже зарегестрированн</a></li>
+                            <li><a href="#" id="auth_from_basket">Я уже зарегестрирован</a></li>
                         </ul>
                     </div>
 
@@ -155,3 +158,13 @@
         <?php endif; ?>
     <?php endif; ?>
 </div>
+
+<script type="application/javascript">
+    $(document).ready(function(){
+        $('input[type=number]').change(function(){
+            if(confirm('Пересчитать показатели?')){
+                $(this).parent().submit();
+            }
+        });
+    });//END READY
+</script>

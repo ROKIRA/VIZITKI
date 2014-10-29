@@ -1168,7 +1168,16 @@ ul.nav-sub li a {
     margin: 0 2px;
     padding: 0 10px;
     background: #179ec4;
+<<<<<<< HEAD
     border-radius: 7px;
+=======
+    -webkit-border-top-left-radius: 7px;
+    -webkit-border-top-right-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    -moz-border-radius-topright: 7px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+>>>>>>> e8012cc495c9be8fd03a900a187a20b2238a5031
     box-shadow: inset 0 -2px 12px 0 rgba(0,0,0,0.5);
     -moz-box-shadow: inset 0 -2px 12px 0 rgba(0,0,0,0.5);
     -webkit-box-shadow: inset 0 -2px 12px 0 rgba(0,0,0,0.5);
@@ -1307,11 +1316,19 @@ ul.nav-sub li a {
 }
 #editor .form_style .controls #nextStep{
     background: url('../images/bg_next.png') left top no-repeat;
+<<<<<<< HEAD
     width: 153px;
     margin-right: 0;
     border: 0;
     padding: 0;
     font-size: 14px;
+=======
+    width: 151px;
+    margin-right: 0;
+    border: 0;
+    padding: 0;
+    font-size: 15px;
+>>>>>>> e8012cc495c9be8fd03a900a187a20b2238a5031
     line-height: 15px;
     font-weight: bold;
     -webkit-text-shadow: 0 1px rgba(255, 255, 255, 0.7),transparent 0 0 0;
@@ -1329,6 +1346,7 @@ ul.nav-sub li a {
     float: right;
 }
 #editor .form_style .controls .move_back{
+<<<<<<< HEAD
     padding: 17px 40px;
     display: inline-block;
     font-weight: bold;
@@ -1359,6 +1377,32 @@ ul.nav-sub li a {
 }
 #editor .form_style .controls .move_back:active {
     background-position: 0 -50px;
+=======
+    padding: 10px 25px;
+    display: inline-block;
+    font-size: 15px;
+    font-weight: bold;
+    -webkit-text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    -moz-text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    -o-text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    -ms-text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    text-decoration: none;
+    margin: 10px 0;
+    color: #fff;
+
+    background: #3bb6d8; /* Old browsers */
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzNiYjZkOCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxNzZlYzQiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  #3bb6d8 0%, #176ec4 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3bb6d8), color-stop(100%,#176ec4)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #3bb6d8 0%,#176ec4 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #3bb6d8 0%,#176ec4 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #3bb6d8 0%,#176ec4 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #3bb6d8 0%,#176ec4 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3bb6d8', endColorstr='#176ec4',GradientType=0 ); /* IE6-8 */
+
+>>>>>>> e8012cc495c9be8fd03a900a187a20b2238a5031
 }
 #editor .form_style .controls #nextStep.disabled{
     opacity: 0.6;
@@ -1368,10 +1412,17 @@ ul.nav-sub li a {
     width: 655px;
     float: left;
 }
+<<<<<<< HEAD
 #editor .form_style .controls #nextStep:hover {
     background-position: 0 -50px;
 }
 #editor .form_style .controls #nextStep:active {
+=======
+#editor .form_style .controls #nextStep:not(.disabled):hover {
+    background-position: 0 -50px;
+}
+#editor .form_style .controls #nextStep:not(.disabled):active {
+>>>>>>> e8012cc495c9be8fd03a900a187a20b2238a5031
     background-position: 0 -100px;
 }
 #editor .form_style .controls #confirm-template {
@@ -1385,12 +1436,17 @@ ul.nav-sub li a {
     width: 205px;
     text-align: left;
     line-height: 1.3;
+<<<<<<< HEAD
     margin: 6px 10px 7px 130px;
+=======
+    margin: 2px 10px 2px 150px;
+>>>>>>> e8012cc495c9be8fd03a900a187a20b2238a5031
 }
 #editor .form_style .controls #confirm-template-label:before {
     content: url('../images/checkbox.png');
     clip: rect(20px, auto, auto, auto);
     position: absolute;
+<<<<<<< HEAD
     top: -9px;
     left: 0;
 }
@@ -1775,3 +1831,18 @@ ul.nav-sub li a {
     background-position: 0 -17px;
 }
 /*=============================================||| ZAKAZ-MAKETA |||========================================================*/
+=======
+    top: -8px;
+    left: 0;
+}
+#editor .form_style .controls #confirm-template-label.disabled:before {
+    clip: rect(auto, auto, 20px, auto);
+    top: 12px;
+}
+.underEditor .controls{
+    float: left;
+}.underEditor .controls:nth-child(3){
+     float: right;
+ }
+/*=============================================||| EDIT-TEMPLATE |||========================================================*/
+>>>>>>> e8012cc495c9be8fd03a900a187a20b2238a5031

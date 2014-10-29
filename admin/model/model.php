@@ -14,6 +14,24 @@ mysqli_query($link,"SET NAMES 'UTF8'") or die('Cant set charset');
 /*======================= connect to database  ===========================*/
 
 
+/**======================= GET CONFIGS ===========================**/
+    function getConfigs(){
+        global $link;
+
+        $q = "SELECT * FROM config";
+        $result = mysqli_query($link, $q);
+        if(!$result) return false;
+
+        $configs = array();
+        while($row = mysqli_fetch_assoc($result)){
+            $configs[] = $row;
+        }
+
+        return $configs;
+    }
+/**======================= GET CONFIGS ===========================**/
+
+
 /*======================= GET ORDERS ===========================*/
     function getOrders(){
         global $link;
@@ -180,11 +198,11 @@ function deleteGroup($id){
     global $link;
 
     $group = getAdminService($id);
-    /*$q = "DELETE FROM services WHERE id={$id}";
+    $q = "DELETE FROM services WHERE id={$id}";
     $result = mysqli_query($link,$q);
     if(!$result){
         return false;
-    }*/
+    }
 
     $images = array(
         'image' => $group['image'],
@@ -343,7 +361,7 @@ function saveAddedService($group){
     }
 
     $q = "INSERT INTO page (`name`, `h1`, `title`, `keywords`, `description`, `text`)
-                      VALUES ('" . mysqli_real_escape_string($link, $group['pageAlias']) . "',
+                  VALUES ('" . mysqli_real_escape_string($link, $group['pageAlias']) . "',
                           '" . mysqli_real_escape_string($link, $group['pageH1']) . "',
                           '" . mysqli_real_escape_string($link, $group['pageTitle']) . "',
                           '" . mysqli_real_escape_string($link, $group['pageKeywords']) . "',
@@ -361,6 +379,224 @@ function saveAddedService($group){
 /*============== SAVE|EDIT GROUP|SERVICE ================*/
 
 
+/*============== GET PAPERS TYPE ================*/
+function getAdminPapers(){
+    global $link;
+
+    $q = "SELECT * FROM paper_type";
+    $result = mysqli_query($link,$q);
+    if(!$result){
+        return NULL;
+    }
+
+    $paper_type = array();
+    while($row = mysqli_fetch_assoc($result)){
+        $paper_type[] = $row;
+    }
+
+    return $paper_type;
+}
+/*============== GET PAPER TYPE ================*/
 
 
+/*============== GET PAPERS TYPE ================*/
+function getAdminPaper($id){
+    global $link;
 
+    $q = "SELECT * FROM paper_type WHERE id={$id}";
+    $result = mysqli_query($link,$q);
+    if(!$result){
+        return NULL;
+    }
+
+    $paper_type = array();
+    while($row = mysqli_fetch_assoc($result)){
+        $paper_type[] = $row;
+    }
+
+    return $paper_type[0];
+}
+/*============== GET PAPER TYPE ================*/
+
+
+/*============== SAVE|EDIT PAPER TYPE ================*/
+function saveEditedPaperType($paper)
+{
+    global $link;
+
+    $q = "UPDATE paper_type SET `image` = '" . mysqli_real_escape_string($link, $paper['image']) . "',
+                              `title` = '" . mysqli_real_escape_string($link, $paper['title']) . "',
+                              `density` = '" . mysqli_real_escape_string($link, $paper['density']) . "',
+                              `facture` = '" . mysqli_real_escape_string($link, $paper['facture']) . "',
+                              `color` = '" . mysqli_real_escape_string($link, $paper['color']) . "',
+                              `price1` = '" . mysqli_real_escape_string($link, $paper['price1']) . "',
+                              `price2` = '" . mysqli_real_escape_string($link, $paper['price2']) . "',
+                              `is_active` = '" . mysqli_real_escape_string($link, $paper['is_active']) . "'
+                          WHERE id = {$paper['id']}";
+    $result = mysqli_query($link, $q) or die($q . '<br/>' . mysqli_error($link));
+    if (!$result) {
+        return false;
+    }
+
+    return true;
+}
+/*============== SAVE|EDIT PAPER TYPE ================*/
+
+/*============== SAVE|ADD PAPER TYPE ================*/
+function saveAddedPaperType($paper)
+{
+    global $link;
+
+    $q = "INSERT INTO paper_type (`image`, `title`, `density`, `facture`, `color`, `price1`, `price2`, `is_active`)
+                      VALUES ('" . mysqli_real_escape_string($link, $paper['image']) . "',
+                              '" . mysqli_real_escape_string($link, $paper['title']) . "',
+                              '" . mysqli_real_escape_string($link, $paper['density']) . "',
+                              '" . mysqli_real_escape_string($link, $paper['facture']) . "',
+                              '" . mysqli_real_escape_string($link, $paper['color']) . "',
+                              '" . mysqli_real_escape_string($link, $paper['price1']) . "',
+                              '" . mysqli_real_escape_string($link, $paper['price2']) . "',
+                              '" . mysqli_real_escape_string($link, $paper['is_active']) . "'
+                             )";
+    $result = mysqli_query($link, $q) or die($q . '<br/>' . mysqli_error($link));
+    if (!$result) {
+        return false;
+    }
+
+    return true;
+}
+/*============== SAVE|ADD PAPER TYPE ================*/
+
+
+/*============== DELETE PAPER TYPE ================*/
+function deletePaperType($id){
+    global $link;
+
+    $paper = getAdminPaper($id);
+    $q = "DELETE FROM paper_type WHERE id={$id}";
+    $result = mysqli_query($link, $q);
+    if (!$result) {
+        return false;
+    }
+
+    $image = $paper['image'];
+
+    return $image;
+}
+/*============== DELETE PAPER TYPE ================*/
+
+
+/*============ GET GROUP|SERVICE ALIAS ============*/
+function getAdminServiceByAlias($alias){
+    global $link;
+
+    $q = "SELECT title FROM services WHERE alias='{$alias}'";
+    $result = mysqli_query($link,$q);
+    if(!$result){
+        return NULL;
+    }
+    $group = array();
+    while($row = mysqli_fetch_assoc($result)){
+        $group[] = $row;
+    }
+
+    return $group[0]['title'];
+}
+
+
+/*============== GET PRINTINGS ================*/
+function getAdminPrintings(){
+    global $link;
+
+    $q = "SELECT * FROM tiraj_vizitki";
+    $result = mysqli_query($link,$q);
+    if(!$result){
+        return NULL;
+    }
+
+    $printings = array();
+    $i=0;
+    while($row = mysqli_fetch_assoc($result)){
+        $printings[] = $row;
+        $printings[$i]['group'] = getAdminServiceByAlias($printings[$i]['alias']);
+        $i++;
+    }
+
+    return $printings;
+}
+/*============== GET PRINTINGS ================*/
+
+/*============== GET PRINTING ================*/
+function getAdminPrinting($id){
+    global $link;
+
+    $q = "SELECT * FROM tiraj_vizitki WHERE id={$id}";
+    $result = mysqli_query($link,$q);
+    if(!$result){
+        return NULL;
+    }
+
+    $printing = array();
+    while($row = mysqli_fetch_assoc($result)){
+        $printing[] = $row;
+    }
+
+    return $printing[0];
+}
+/*============== GET PRINTING ================*/
+
+/*============== SAVE|EDIT PRINTING ================*/
+function saveEditedPrinting($printing)
+{
+    global $link;
+
+    $q = "UPDATE tiraj_vizitki SET `count` = '" . mysqli_real_escape_string($link, $printing['count']) . "',
+                              `text` = '" . mysqli_real_escape_string($link, $printing['text']) . "',
+                              `price` = '" . mysqli_real_escape_string($link, $printing['price']) . "',
+                              `alias` = '" . mysqli_real_escape_string($link, $printing['group']) . "',
+                              `type_side` = " . mysqli_real_escape_string($link, $printing['type_side']) . ",
+                              `is_active` = " . mysqli_real_escape_string($link, $printing['is_active']) . "
+                          WHERE id = {$printing['id']}";
+    $result = mysqli_query($link, $q) or die($q . '<br/>' . mysqli_error($link));
+    if (!$result) {
+        return false;
+    }
+
+    return true;
+}
+/*============== SAVE|EDIT PRINTING ================*/
+
+/*============== SAVE|ADD PRINTING ================*/
+function saveAddedPrinting($printing)
+{
+    global $link;
+
+    $q = "INSERT INTO tiraj_vizitki (`count`, `text`, `price`, `alias`, `type_side`, `is_active`)
+                      VALUES(" . mysqli_real_escape_string($link, $printing['count']) . ",
+                              '" . mysqli_real_escape_string($link, $printing['text']) . "',
+                              '" . mysqli_real_escape_string($link, $printing['price']) . "',
+                              '" . mysqli_real_escape_string($link, $printing['group']) . "',
+                              '" . mysqli_real_escape_string($link, $printing['type_side']) . "',
+                              {$printing['is_active']}
+                            )";
+    $result = mysqli_query($link, $q) or die($q . '<br/>' . mysqli_error($link));
+    if (!$result) {
+        return false;
+    }
+
+    return true;
+}
+/*============== SAVE|ADD PRINTING ================*/
+
+/*============== DELETE PAPER TYPE ================*/
+function deletePrinting($id){
+    global $link;
+
+    $q = "DELETE FROM tiraj_vizitki WHERE id={$id}";
+    $result = mysqli_query($link, $q);
+    if (!$result) {
+        return false;
+    }
+
+    return true;
+}
+/*============== DELETE PAPER TYPE ================*/

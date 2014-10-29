@@ -30,6 +30,24 @@ mysqli_query($link,"SET NAMES 'UTF8'") or die('Cant set charset');
 /*============== Get Main Menu ================*/
 
 
+/*============== Get Site Configs ================*/
+function getSiteConfigs(){
+    global $link;
+
+    $q = "SELECT * FROM config";
+    $result = mysqli_query($link,$q);
+    if(!$result){
+        return NULL;
+    }
+    $configs = array();
+    while($row = mysqli_fetch_assoc($result)){
+        $configs[] = $row;
+    }
+    return $configs;
+}
+/*============== Get Site Configs ================*/
+
+
 /*============== Get Services ================*/
     function getServices(){
         global $link;
@@ -45,6 +63,26 @@ mysqli_query($link,"SET NAMES 'UTF8'") or die('Cant set charset');
             $services[] = $row;
         }
         return $services;
+
+    }
+
+/*============== Get Services ================*/
+
+/*============== Get Services ================*/
+    function getSliderImages(){
+        global $link;
+
+        $q = "SELECT * FROM slider WHERE `is_active` = 1";
+        $result = mysqli_query($link,$q);
+        if(!$result){
+            return NULL;
+        }
+
+        $slider = array();
+        while($row = mysqli_fetch_assoc($result)){
+            $slider[] = $row;
+        }
+        return $slider;
 
     }
 
@@ -117,11 +155,11 @@ mysqli_query($link,"SET NAMES 'UTF8'") or die('Cant set charset');
 /*============== Get Service Title ================*/
 
 
-/*============== Get Group Templates ================*/
-    function getGroupTemplates(){
+/*============== Get Categories|Group Templates ================*/
+    function getCategories(){
         global $link;
 
-        $q = "SELECT * FROM templates_group";
+        $q = "SELECT * FROM categories WHERE is_active=1";
         $result = mysqli_query($link,$q);
         if(!$result){
             return NULL;
@@ -135,14 +173,36 @@ mysqli_query($link,"SET NAMES 'UTF8'") or die('Cant set charset');
 
     }
 
-/*============== Get Group Templates ================*/
+/*============== Get Categories|Group Templates ================*/
 
 
 /*============== Get Templates ================*/
-    function getTemplates($alias){
+    function getNewTemplates(){
         global $link;
 
-        $q = "SELECT * FROM template WHERE group_alias = '{$alias}'";
+        $q = "SELECT * FROM template WHERE is_active=1 ORDER BY `created_at` LIMIT 15";
+        $result = mysqli_query($link,$q);
+        if(!$result){
+            return NULL;
+        }
+
+        $templates = array();
+        while($row = mysqli_fetch_assoc($result)){
+            $templates[] = $row;
+        }
+        return $templates;
+
+    }
+
+/*============== Get Templates ================*/
+
+
+
+/*============== Get Templates ================*/
+    function getTemplates(){
+        global $link;
+
+        $q = "SELECT * FROM template WHERE is_active=1";
         $result = mysqli_query($link,$q);
         if(!$result){
             return NULL;
@@ -253,7 +313,7 @@ function getPrintingType($id){
 function getPaperTypes(){
     global $link;
 
-    $q = "SELECT * FROM paper_type";
+    $q = "SELECT * FROM paper_type WHERE is_active = 1";
     $result = mysqli_query($link,$q);
     if(!$result){
         return NULL;
@@ -274,7 +334,7 @@ function getPaperTypes(){
 function getPaperType($id){
     global $link;
 
-    $q = "SELECT id, title, price FROM paper_type WHERE id = '{$id}'";
+    $q = "SELECT id, title, price1, price2 FROM paper_type WHERE id = {$id} AND is_active = 1";
     $result = mysqli_query($link,$q);
     if(!$result){
         return NULL;
@@ -294,10 +354,10 @@ function getPaperType($id){
 
 
 /*============== Get Extra - Dop Uslugi ================*/
-    function getExtra(){
+    function getExtra($design){
         global $link;
 
-        $q = "SELECT * FROM dop_uslugi";
+        $q = "SELECT * FROM dop_uslugi WHERE design IN ({$design})";
         $result = mysqli_query($link,$q);
         if(!$result){
             return NULL;
@@ -318,6 +378,8 @@ function getPaperType($id){
 /*============== Get PageContent ================*/
 function getPageContent($page){
     global $link;
+
+    $page = trim($page);
 
     $q = "SELECT * FROM page WHERE name='{$page}'";
     $result = mysqli_query($link,$q);
@@ -349,6 +411,24 @@ function saveUser($user){
     }
 
     return $user_id;
+}
+
+/*============== Save User ================*/
+
+/*============== Save User ================*/
+function saveNewPassword($email, $password){
+    global $link;
+
+    $password = md5(sha1($password));
+
+    $q = "UPDATE `users` SET `password`='{$password}'
+                WHERE `email`='{$email}'";
+    $result = mysqli_query($link,$q);
+    if(!$result){
+        return false;
+    }
+
+    return true;
 }
 
 /*============== Save User ================*/

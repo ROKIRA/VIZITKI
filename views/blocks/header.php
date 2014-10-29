@@ -2,7 +2,7 @@
 <div class="site_size">
 <div class="hTop">
     <div class="logoBlock">
-        <a href="/"><img src="<?=ASSET?>/images/logo.png"></a>
+        <a href="/"><img src="<?=ASSET?>/images/logo.png" alt="logo"></a>
     </div>
     <?php require_once 'mainMenu.php' ?>
     <div class="hTop_right">
@@ -28,8 +28,8 @@
     <div class="site_size">
 
         <address>
-            <span>+38 (050) 807-85-86</span>
-            <span>+38 (096) 807-85-86</span>
+            <span><?=$configs['phone_mts']['value']?></span>
+            <span><?=$configs['phone_kyevstar']['value']?></span>
         </address>
 
         <div class="social">
@@ -46,7 +46,11 @@
                     <strong><a href="#"><?=$user['login']?></a></strong>, <a href="<?=PATH.'/logout'?>">Выйти</a>
                 <?php else: ?>
                 <a id="auth" href="#">Вход</a>
+<<<<<<< HEAD
                 <section id="login">
+=======
+                <section id="login" <?php if($error = getSession('error')) echo 'style="display:block;"' ?>>
+>>>>>>> e8012cc495c9be8fd03a900a187a20b2238a5031
                         <div class="auth_header">
                             <h3>Авторизация</h3>
                             <p id="close">X</p>

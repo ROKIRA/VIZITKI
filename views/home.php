@@ -24,17 +24,17 @@
                 <img data-hover="<?=UPLOADS?><?=($service['image_hover'] ? 'services/'.$service['image_hover'] : 'no_image.jpg')?>" src="<?=UPLOADS?><?=($service['image'] ? 'services/'.$service['image'] : 'no_image.jpg')?>" alt="<?=$service['title']?>"/>
                 <div class="service_info">
                     <a href="<?=PATH?>/catalog/service/<?=$service['alias']?>" class="service_info_top">
-                        <div class="like-h5"><?=$service['title']."\n"?><?=$service['size']?></div>
+                        <p class="like-h5"><?=$service['title']."\n"?><?=$service['size']?></p>
                         <?php if($service['price1']): ?>
                             <div class="service_price">
                                 <div>
-                                    <p><?=$service['count1']?></p>
-                                    <p><?=$service['price1']?></p>
+                                    <p><?=$service['count1']?> штук</p>
+                                    <p><?=ceil($service['price1']*KURS)?> грн</p>
                                 </div>
                                 <?php if($service['price1']): ?>
                                     <div>
-                                        <p><?=$service['count2']?></p>
-                                        <p><?=$service['price2']?></p>
+                                        <p><?=$service['count2']?> штук</p>
+                                        <p><?=ceil($service['price2']*KURS)?> грн</p>
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -82,6 +82,8 @@
             _self.data('hover', src);
         });
 
+<<<<<<< HEAD
+=======
 
     /************************** AUTH | LOGIN *********************/
         var authWindow = $('#login');
@@ -98,5 +100,6 @@
 
 
 
+>>>>>>> cc040a90a60befc7a4d9618cec72c22cd06c806b
     });
 </script>

@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <input type="text" value="12" name="group_id" style="display: none;" />
+    <input type="hidden" value="12" name="group_id" />
 
     <p class="properties-order">Свойства заказа</p>
 
@@ -39,7 +39,7 @@
             <select data-error="" id="printingType" class="valid" name="printing_type">
                 <option data-cost="0"></option>
                 <?php foreach($tiraj as $t): ?>
-                    <option data-cost="<?=$t['price']?>" data-side="<?=$t['type_side']?>" value="<?=$t['id']?>">
+                    <option data-cost="<?=ceil($t['price']*KURS)?>" data-side="<?=$t['type_side']?>" value="<?=$t['id']?>">
                         <?=$t['text']?>
                     </option>
                 <?php endforeach; ?>
@@ -70,7 +70,7 @@
             <?php foreach($paper_types as $paper): ?>
                 <li>
                     <div class="radioSelect">
-                        <input type="radio" name="paper_type" id="paperNum-<?=$paper['id']?>" data-cost1="<?=$paper['price']?>" data-cost2="0" value="<?=$paper['id']?>">
+                        <input type="radio" name="paper_type" id="paperNum-<?=$paper['id']?>" data-cost1="<?=ceil($paper['price1']*KURS)?>" data-cost2="<?=ceil($paper['price2']*KURS)?>" value="<?=$paper['id']?>">
                         <label for="paperNum-<?=$paper['id']?>"><?=$paper['title']?></label>
                     </div>
                     <img src="<?=PATH.'/uploads/paper_type/'.$paper['image']?>"/>

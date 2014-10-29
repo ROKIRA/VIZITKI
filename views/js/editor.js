@@ -3,6 +3,9 @@ $(document).ready(function() {
     var MyBaseURL = 'http://art-vitalis.com.ua/test/vizitki/';
 
     var confirmTemplate = $('#confirm-template');
+    var confirmFlag = false;
+    var confirmLabel = $('#confirm-template-label');
+    var nextStepBtn = $('#nextStep');
 
     var loadingEditor = $('#loading-editor');
 
@@ -14,6 +17,15 @@ $(document).ready(function() {
     var textControl = $('#textEditControl');
     var mainField = $('#cardMainEditor');
 
+
+    function uncheckConf(){
+        confirmTemplate.prop('checked', false);
+        nextStepBtn.addClass('disabled').attr('disabled','disabled');
+        confirmLabel.addClass('disabled').attr('disabled','disabled');
+        confirmFlag = false;
+    }
+
+
     $('#colorpickerHolder').ColorPicker({
         flat: true,
         color: '#000000',
@@ -22,13 +34,13 @@ $(document).ready(function() {
             $('#colorpickerHolder').fadeOut(100);
             var color = tieTxtControl($('#colorpickerHolder'));
             color.css('color', '#' + hex);
-            confirmTemplate.prop('checked', false);
+            uncheckConf();
         }
     });
 
     $('#colorSelector').on('click', function() {
         $('#colorpickerHolder').stop(true).fadeIn('slow');
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $('#backgroundColorHolder').ColorPicker({
@@ -43,7 +55,7 @@ $(document).ready(function() {
 
     $('#backgroundColorSelector').on('click', function() {
         $('#backgroundColorHolder').stop(true).fadeIn('slow');
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $('.lineControl label').on('mouseup', function() {
@@ -128,7 +140,10 @@ $(document).ready(function() {
         txtm.appendTo(textField);
 
         $('.txtMove').draggable({
-            containment: "parent"
+            containment: "parent",
+            drag: function(event, ui){
+                uncheckConf();
+            }
         });
         inp.focus();
     };
@@ -157,21 +172,25 @@ $(document).ready(function() {
         imgm.appendTo(imgCont);
         imgCont.appendTo(mainField);
 
-        $('.imgMove').draggable().resizable();
+        $('.imgMove').draggable({
+            drag: function(event, ui){
+                uncheckConf();
+            }
+        }).resizable();
 
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     };
 
     $(document).on('keydown', function(e) {
         if (e.keyCode == 16) {
             textField.addClass('point');
         }
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     }).on('keyup', function(e) {
         if (e.keyCode == 16) {
             textField.removeClass('point');
         }
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $(document).on('click','.delBtn', function() {
@@ -190,7 +209,7 @@ $(document).ready(function() {
             del.remove();
             txtB.remove();
         }, 300);
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $(document).on('click','.visible', function() {
@@ -208,37 +227,37 @@ $(document).ready(function() {
             $('<div class="disbl"></div>').appendTo(vis);
             txtB.addClass('hidden');
         }
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $('#addText').on('click touchstart', function(event) {
         event.preventDefault();
         addTxt();
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $('.addimageBlock .editorBtn').on('click touchstart', function(event) {
         $(this).parent().children('.addImageField').fadeIn(300);
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
 
     $('#addImage').on('click touchstart', function(event) {
         $(this).parent().parent().fadeOut(20);
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
 
     $('#superframe').on('load',function(){
         if($('#new_photo').text()!=''){addImage();}
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     var setTxtParam = function(target, child) {
         textControl.children(child).find('option').prop('selected', false);
         textControl.children(child).find("option[value='" + target + "']").prop("selected", true);
         console.log(target);
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     };
 
     var setTxtStyle = function(styleBtn, bool) {
@@ -247,7 +266,7 @@ $(document).ready(function() {
         } else {
             $(styleBtn).removeClass('active');
         }
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     };
 
     $(document).on('focus','.editorContolBlock input', function(event) {
@@ -264,19 +283,19 @@ $(document).ready(function() {
         setTxtStyle('#txtItalic', focItm.css('font-style') === 'italic');
         setTxtStyle('#txtUnder', focItm.css('text-decoration').split(" ")[0] === 'underline');
 
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $(document).on('blur','.editorContolBlock input', function(event) {
         var focItm = tieTxt($(this));
         focItm.removeClass('edit');
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $(document).on('keyup','.editorContolBlock input', function(event) {
         var focItm = tieTxt($(this));
         focItm.text($(this).val());
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $(document).on('mouseenter','.txtMove', function() {
@@ -287,13 +306,12 @@ $(document).ready(function() {
     $(document).on('dblclick','.txtMove', function() {
         var inp = tieTxtBack($(this));
         inp.children('input').focus();
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $(document).on('mouseout','.txtMove', function(event) {
         var inp = tieTxtBack($(this));
         inp.children('input').removeClass('edit');
-        confirmTemplate.prop('checked', false);
     });
 
     $(document).on('change','.chooseFont select', function() {
@@ -302,7 +320,7 @@ $(document).ready(function() {
         textField.find('[data-id="' + txtid + '"]').css({
             'font-family': val
         });
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $(document).on('change','.chooseFontSize select', function() {
@@ -311,7 +329,7 @@ $(document).ready(function() {
         textField.find('[data-id="' + txtid + '"]').css({
             'font-size': val + 'px'
         });
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $(document).on('click','#txtBold', function(event) {
@@ -325,7 +343,7 @@ $(document).ready(function() {
             itm.css('font-weight', 'bold');
             th.addClass('active');
         }
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $(document).on('click','#txtItalic', function(event) {
@@ -339,7 +357,7 @@ $(document).ready(function() {
             itm.css('font-style', 'italic');
             th.addClass('active');
         }
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     $(document).on('click','#txtUnder', function(event) {
@@ -353,7 +371,7 @@ $(document).ready(function() {
             itm.css('text-decoration', 'underline');
             th.addClass('active');
         }
-        confirmTemplate.prop('checked', false);
+        uncheckConf();
     });
 
     /*--------------------------  SAVE TEMPLATE  ------------------------------------ */
@@ -390,8 +408,18 @@ $(document).ready(function() {
 
 
     $(document).on('click', '#confirm-template', function(){
-        saveTemplate(current_side.val());
+        if(confirmFlag == false){
+            saveTemplate(current_side.val());
+            nextStepBtn.removeClass('disabled').removeAttr('disabled');
+            confirmLabel.removeClass('disabled').removeAttr('disabled');
+            confirmFlag = true;
+        }else{
+            uncheckConf();
+        }
+
     });
+
+
     /*function(){
         //if(!this.checked()) return false;
 
@@ -515,7 +543,13 @@ $(document).ready(function() {
                     imgm.appendTo(imgCont);
                     imgCont.appendTo(mainField);
 
-                    $('.imgMove').draggable().resizable();
+                    $('.imgMove').draggable({
+                        drag: function(event, ui){
+                            confirmTemplate.prop('checked', false);
+                            nextStepBtn.addClass('disabled').attr('disabled','disabled');
+                            confirmFlag = false;
+                        }
+                    }).resizable();
 
                 } else {
                     var li = $('<li>').addClass('editorContolBlock').attr('data-id', liItm.data_id),
@@ -536,7 +570,12 @@ $(document).ready(function() {
                     var txtm = $('<div>').addClass('txtMove').attr('style', liItm.style).attr('data-id', liItm.data_id).text(liItm.data_value);
                     txtm.prependTo(textField);
                     $('.txtMove').draggable({
-                        containment: "parent"
+                        containment: "parent",
+                        drag: function(event, ui){
+                            confirmTemplate.prop('checked', false);
+                            nextStepBtn.addClass('disabled').attr('disabled','disabled');
+                            confirmFlag = false;
+                        }
                     });
                 }
             }
@@ -588,7 +627,12 @@ $(document).ready(function() {
                         imgm.appendTo(imgCont);
                         imgCont.appendTo(mainField);
 
-                        $('.imgMove').draggable().resizable();
+                        $('.imgMove').draggable({
+                            drag: function(event, ui){
+                                confirmTemplate.prop('checked', false);
+                                nextStepBtn.addClass('disabled').attr('disabled','disabled');
+                            }
+                        }).resizable();
 
                     } else {
                         var li = $('<li>').addClass('editorContolBlock').attr('data-id', liItm.data_id),
@@ -609,7 +653,12 @@ $(document).ready(function() {
                         var txtm = $('<div>').addClass('txtMove').attr('style', liItm.style).attr('data-id', liItm.data_id).text(liItm.data_value);
                         txtm.prependTo(textField);
                         $('.txtMove').draggable({
-                            containment: "parent"
+                            containment: "parent",
+                            drag: function(event, ui){
+                                confirmTemplate.prop('checked', false);
+                                nextStepBtn.addClass('disabled').attr('disabled','disabled');
+                                confirmFlag = false;
+                            }
                         });
                     }
                 }
@@ -658,7 +707,13 @@ $(document).ready(function() {
                         imgm.appendTo(imgCont);
                         imgCont.appendTo(mainField);
 
-                        $('.imgMove').draggable().resizable();
+                        $('.imgMove').draggable({
+                            drag: function(event, ui){
+                                confirmTemplate.prop('checked', false);
+                                nextStepBtn.addClass('disabled').attr('disabled','disabled');
+                                confirmFlag = false;
+                            }
+                        }).resizable();
 
                     } else {
                         var li = $('<li>').addClass('editorContolBlock').attr('data-id', liItm.data_id),
@@ -679,7 +734,12 @@ $(document).ready(function() {
                         var txtm = $('<div>').addClass('txtMove').attr('style', liItm.style).attr('data-id', liItm.data_id).text(liItm.data_value);
                         txtm.prependTo(textField);
                         $('.txtMove').draggable({
-                            containment: "parent"
+                            containment: "parent",
+                            drag: function(event, ui){
+                                confirmTemplate.prop('checked', false);
+                                nextStepBtn.addClass('disabled').attr('disabled','disabled');
+                                confirmFlag = false;
+                            }
                         });
                     }
                 }

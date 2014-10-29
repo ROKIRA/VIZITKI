@@ -83,7 +83,7 @@
                 <textarea class="form-control" name="group_description" id="group_description" cols="30" rows="3"><?=htmlspecialchars($groupContent['description'])?></textarea>
             </div>
 
-                <input class="btn btn-primary" name="group_edit" type="submit" value="Сохранить"/>
+                <input class="btn btn-success" name="group_edit" type="submit" value="Сохранить"/>
             <input type="hidden" name="alias" value="<?=$group['alias']?>"/>
         </form>
 
@@ -95,7 +95,7 @@
     <?php endif; ?>
 </section>
 
-<?php unset($_SESSION['admin_errors'], $_SESSION['admin']['error']); ?>
+<?php unset($_SESSION['admin_errors'], $_SESSION['admin']['error'], $_SESSION['admin_success']); ?>
 
 
 <script type="application/javascript">

@@ -114,14 +114,14 @@ function removeOrderLayouts($id){
 }
 
 function removeGroupLayouts($images){
-    $dir = 'uploads/services/';
-
+    $dir = '../uploads/services/';
         unlink($dir.$images['image']);
         unlink($dir.$images['image_hover']);
-
-        print_r($images);
-        ed($dir.$images['image']);
-
+    return true;
+}
+function removePaperImage($image){
+    $dir = '../uploads/paper_type/';
+        unlink($dir.$image);
     return true;
 }
 
@@ -201,4 +201,19 @@ function str2url($str) {
 
     return $str;
 
+}
+
+function basketRecount($index, $count){
+    if($count == 0){
+        redirect();
+    }else{
+        $item = getSession('basket');
+        $newTotalSum = $item[$index]['totalSum'] / $item[$index]['kolvo'] * $count;
+        $newCount = $item[$index]['count'] / $item[$index]['kolvo'] * $count;
+        $_SESSION['basket'][$index]['kolvo'] = $count;
+        $_SESSION['basket'][$index]['count'] = $newCount;
+        $_SESSION['basket'][$index]['totalSum'] = $newTotalSum;
+        redirect();
+    }
+    return true;
 }

@@ -6,6 +6,9 @@ define('PATH', 'http://art-vitalis.com.ua/test/vizitki');
 // denied access to php files
 define('VIZITKI', TRUE);
 
+// site name
+define('SITE_NAME', 'onlinevizitka.com.ua');
+
 // model
 define('MODEL', 'models/model.php');
 
@@ -28,7 +31,7 @@ define('ADMIN_PASSWORD', 'admin_12345');
 
 
 // folder wuth content (images etc.)
-define('VIZITKAIMG', PATH.'/uploads/');
+define('UPLOADS', PATH.'/uploads/');
 
 // DB server
 define('HOST', 'artvital.mysql.ukraine.com.ua');
@@ -45,5 +48,3 @@ define('DB', 'artvital_vizitki');
 //admin email
 define('ADMIN_EMAIL', 'igoshin18@gmail.com');
 
-// count items on the page
-define('PERPAGE', 10);

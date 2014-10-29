@@ -14,9 +14,11 @@ $url = str_replace('/test/vizitki', '', $_SERVER['REQUEST_URI']);
 $routes = array(
     array('url' => '', 'view' => 'home'),
     array('url' => '/', 'view' => 'home'),
+
     array('url' => '/registration', 'view' => 'register'),
     array('url' => '/login', 'view' => 'login'),
     array('url' => '/logout', 'view' => 'logout'),
+    array('url' => '/forget-password', 'view' => 'forget_password'),
 
     array('url' => '/trebovanija_k_maketam', 'view' => 'trebovanija_k_maketam'),
     array('url' => '/guestbook', 'view' => 'guestbook'),
@@ -25,11 +27,13 @@ $routes = array(
 
     array('url' => '#^/catalog/service/(?P<service_alias>[a-z0-9-]+)/?$#i', 'view' => 'catalog_service'),
 
-    array('url' => '/catalog/edit-template-vizitki/', 'view' => 'vizitka_edit_group_list'),
-    array('url' => '#^/catalog/edit-template-vizitki/(?P<alias>[a-z0-9-]+)/?$#i', 'view' => 'vizitka_edit_template_list'),
+    array('url' => '/catalog/edit-template-vizitki/', 'view' => 'vizitka_edit_template_list'),
+    //array('url' => '#^/catalog/edit-template-vizitki/(?P<alias>[a-z0-9-]+)/?$#i', 'view' => 'vizitka_edit_template_list'),
     array('url' => '#^/catalog/edit-template-vizitki/([a-z0-9-]+)/(?P<id>\d+)#i', 'view' => 'vizitka_edit_template'),
 	
 	array('url' => '#^/catalog/upload-layout/(?P<layout_alias>[a-z0-9-]+)/?$#i', 'view' => 'upload_layout'),
+
+	array('url' => '#^/catalog/order-design/(?P<service_alias>[a-z0-9-]+)/?$#i', 'view' => 'order_design'),
 
 
     array('url' => '/editor', 'view' => 'editor'),
